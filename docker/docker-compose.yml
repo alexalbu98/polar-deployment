@@ -1,10 +1,11 @@
-version: "3.8"
 services:
   catalog-service:
     depends_on:
       - polar-postgres
     image: "catalog-service"
     container_name: "catalog-service"
+    networks:
+      - polar-network
     ports:
       - "9001:9001"
     environment:
@@ -14,9 +15,15 @@ services:
   polar-postgres:
     image: "postgres:16.0"
     container_name: "polar-postgres"
+    networks:
+      - polar-network
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=polardb_catalog
+
+networks:
+  polar-network:
+    driver: bridge  # This is the default network driver; optional to specif
