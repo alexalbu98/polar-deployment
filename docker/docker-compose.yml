@@ -15,6 +15,7 @@ services:
       - BPL_DEBUG_PORT=8001
       - SPRING_R2DBC_URL=r2dbc:postgresql://polar-postgres:5432/polardb_order
       - SPRING_FLYWAY_URL=jdbc:postgresql://polar-postgres:5432/polardb_order
+
   catalog-service:
     depends_on:
       - polar-postgres
@@ -30,6 +31,7 @@ services:
       - BPL_DEBUG_PORT=8001
       - SPRING_DATASOURCE_URL=jdbc:postgresql://polar-postgres:5432/polardb_catalog
       - SPRING_PROFILES_ACTIVE=testdata
+
   polar-postgres:
     image: "postgres:16.0"
     container_name: "polar-postgres"
@@ -42,6 +44,14 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  polar-redis:
+    image: "redis:7.0"
+    container_name: "polar-redis"
+    ports:
+      - "6379:6379"
+    networks:
+      - polar-network
 
 networks:
   polar-network:
